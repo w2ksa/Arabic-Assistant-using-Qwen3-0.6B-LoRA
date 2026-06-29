@@ -1,0 +1,9 @@
+torch
+transformers
+accelerate
+peft
+datasets
+trl
+gradio
+sentencepiece
+protobuf
