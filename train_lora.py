@@ -1,22 +1,43 @@
-"""
-LoRA fine-tuning entry point.
+import argparse
+import json
+from pathlib import Path
 
-This file is intentionally simple. It prepares the repository for the next training phase:
-1. Load a JSONL instruction dataset.
-2. Load the Qwen/Qwen3-0.6B base model.
-3. Attach a LoRA adapter.
-4. Train only the adapter weights.
-5. Save the adapter under outputs/.
 
-Full training commands and notes are documented in docs/roadmap.md.
-"""
+def read_jsonl(path):
+    rows = []
+    with Path(path).open("r", encoding="utf-8") as file:
+        for line in file:
+            if line.strip():
+                rows.append(json.loads(line))
+    return rows
+
+
+def preview_dataset(path):
+    rows = read_jsonl(path)
+    print("Dataset path:", path)
+    print("Rows:", len(rows))
+    if rows:
+        print("First instruction:", rows[0].get("instruction", ""))
+    return rows
 
 
 def main():
-    print("LoRA training pipeline placeholder.")
-    print("Next step: add the complete training implementation after local environment testing.")
-    print("Base model: Qwen/Qwen3-0.6B")
-    print("Training method: LoRA adapter fine-tuning")
+    parser = argparse.ArgumentParser(description="Adapter preparation script")
+    parser.add_argument("--dataset", default="data/sample_dataset.jsonl")
+    parser.add_argument("--output", default="outputs/qwen3-arabic-adapter")
+    args = parser.parse_args()
+
+    preview_dataset(args.dataset)
+    Path(args.output).mkdir(parents=True, exist_ok=True)
+
+    notes_path = Path(args.output) / "training_plan.txt"
+    notes_path.write_text(
+        "Base model: Qwen/Qwen3-0.6B\n"
+        "Method: LoRA adapter fine-tuning\n"
+        "Status: prepared for local GPU or cloud GPU run\n",
+        encoding="utf-8",
+    )
+    print("Prepared output folder:", args.output)
 
 
 if __name__ == "__main__":
