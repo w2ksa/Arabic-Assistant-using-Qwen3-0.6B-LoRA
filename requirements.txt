@@ -7,3 +7,4 @@ trl
 gradio
 sentencepiece
 protobuf
+pytest
